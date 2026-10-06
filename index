@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whispers Across the Miles</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            romantic: {
+              50: '#fff1f2',
+              100: '#ffe4e6',
+              200: '#fecdd3',
+              500: '#f43f5e',
+              600: '#e11d48',
+              900: '#881337',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Dancing+Script:wght@500;700&family=Kalam:wght@300;400;700&family=Marck+Script&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Sacramento&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    @keyframes floatPetal {
+      0% {
+        transform: translateY(-10vh) translateX(0) rotate(0deg);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(105vh) translateX(65px) rotate(360deg);
+        opacity: 0.1;
+      }
+    }
+
+    .petal {
+      position: fixed;
+      top: -40px;
+      pointer-events: none;
+      z-index: 15;
+      animation: floatPetal linear infinite;
+    }
+
+    /* Paper Textures & Themes */
+    .paper-parchment {
+      background-color: #fbf5e8;
+      background-image: radial-gradient(#eadbc5 1.1px, transparent 0);
+      background-size: 24px 24px;
+      color: #3b2f27;
+      box-shadow: 0 15px 35px -5px rgba(114, 88, 59, 0.25), 0 0 0 1px rgba(181, 148, 107, 0.2);
+    }
+    .dark .paper-parchment {
+      background-color: #24201c;
+      background-image: radial-gradient(#3a3229 1.1px, transparent 0);
+      color: #ede5da;
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(90, 75, 58, 0.35);
+    }
+
+    .paper-blush {
+      background-color: #fff2f2;
+      background-image: radial-gradient(#ffd4d4 1.2px, transparent 0);
+      background-size: 22px 22px;
+      color: #4a2c33;
+      box-shadow: 0 15px 35px -5px rgba(180, 80, 100, 0.2), 0 0 0 1px rgba(230, 170, 180, 0.3);
+    }
+    .dark .paper-blush {
+      background-color: #2b181e;
+      background-image: radial-gradient(#4d2632 1.2px, transparent 0);
+      color: #fed7e2;
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(120, 50, 70, 0.4);
+    }
+
+    .paper-midnight {
+      background-color: #121324;
+      color: #f1f1f8;
+      background-image: radial-gradient(#2d2e54 1px, transparent 0);
+      background-size: 20px 20px;
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(99, 102, 241, 0.25);
+    }
+
+    .paper-vintage-lines {
+      background-color: #faf7ee;
+      background-image: repeating-linear-gradient(transparent, transparent 31px, #e4dcbe 31px, #e4dcbe 32px);
+      color: #382e25;
+      box-shadow: 0 15px 35px -5px rgba(112, 100, 80, 0.25);
+      line-height: 32px;
+    }
+    .dark .paper-vintage-lines {
+      background-color: #1e1b18;
+      background-image: repeating-linear-gradient(transparent, transparent 31px, #363028 31px, #363028 32px);
+      color: #ece4d8;
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.7);
+      line-height: 32px;
+    }
+
+    .paper-clean-cotton {
+      background-color: #ffffff;
+      color: #292524;
+      box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    }
+    .dark .paper-clean-cotton {
+      background-color: #1c1917;
+      color: #fafaf9;
+      box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.07);
+    }
+
+    /* Wax Seal styling */
+    .wax-seal {
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.45);
+    }
+    .wax-seal:hover {
+      transform: scale(1.08) rotate(3deg);
+    }
+    .wax-seal:active {
+      transform: scale(0.95);
+    }
+
+    .envelope-flap-top {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: top center;
+    }
+    .envelope-open .envelope-flap-top {
+      transform: rotateX(180deg);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(244, 63, 94, 0.3);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(244, 63, 94, 0.5);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-stone-100 text-stone-800 dark:bg-[#0f0e13] dark:text-stone-200 transition-colors duration-500 overflow-x-hidden select-none font-sans flex flex-col justify-between" id="appBody">
+
+  <div id="ambientContainer" class="pointer-events-none fixed inset-0 overflow-hidden z-10"></div>
+
+  <!-- Background Music Audio Player -->
+  <audio id="bgMusicPlayer" preload="auto" loop></audio>
+
+  <!-- Header -->
+  <header class="relative z-20 w-full max-w-5xl mx-auto px-4 pt-4 pb-2 flex items-center justify-between">
+    <div class="flex items-center space-x-2.5">
+      <div class="h-9 w-9 rounded-full bg-rose-100 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 flex items-center justify-center font-serif italic shadow-sm transition">
+        <i class="fa-solid fa-heart text-sm animate-pulse"></i>
+      </div>
+      <div>
+        <h1 class="text-sm sm:text-base font-semibold tracking-wide uppercase text-stone-700 dark:text-stone-200 font-serif" id="appHeading">Whispers Across The Miles</h1>
+        <p class="text-[10px] sm:text-xs text-stone-400 dark:text-stone-500">Every whisper brings us closer</p>
+      </div>
+    </div>
+
+    <!-- Quick controls -->
+    <div class="flex items-center space-x-2 sm:space-x-2.5 text-stone-600 dark:text-stone-300">
+      <!-- Dark/Light Mode toggle -->
+      <button id="themeToggleBtn" title="Toggle Dark/Light Mode" aria-label="Toggle theme" class="p-2 w-9 h-9 rounded-full bg-white/80 dark:bg-stone-800/80 hover:bg-white dark:hover:bg-stone-700 backdrop-blur shadow-sm hover:text-rose-500 transition flex items-center justify-center border border-stone-200/50 dark:border-stone-700/60">
+        <i class="fa-solid fa-moon text-xs sm:text-sm" id="themeIcon"></i>
+      </button>
+
+      <!-- Petal toggle -->
+      <button id="togglePetalsBtn" title="Toggle Floating Petals" class="p-2 w-9 h-9 rounded-full bg-white/80 dark:bg-stone-800/80 hover:bg-white dark:hover:bg-stone-700 backdrop-blur shadow-sm hover:text-rose-500 transition flex items-center justify-center border border-stone-200/50 dark:border-stone-700/60 text-rose-500">
+        <i class="fa-solid fa-spa text-xs sm:text-sm"></i>
+      </button>
+
+      <!-- Music ambience toggle -->
+      <button id="toggleMusicBtn" title="Play Romantic / Harry Potter Music" class="p-2 w-9 h-9 rounded-full bg-white/80 dark:bg-stone-800/80 hover:bg-white dark:hover:bg-stone-700 backdrop-blur shadow-sm hover:text-rose-500 transition flex items-center justify-center border border-stone-200/50 dark:border-stone-700/60">
+        <i class="fa-solid fa-music text-xs sm:text-sm" id="musicStatusIcon"></i>
+      </button>
+
+      <!-- Track Switcher Button -->
+      <button id="nextTrackBtn" title="Next Song" class="p-2 w-9 h-9 rounded-full bg-white/80 dark:bg-stone-800/80 hover:bg-white dark:hover:bg-stone-700 backdrop-blur shadow-sm hover:text-rose-500 transition flex items-center justify-center border border-stone-200/50 dark:border-stone-700/60 text-xs">
+        <i class="fa-solid fa-forward-step"></i>
+      </button>
+
+      <!-- Sender panel access -->
+      <button id="adminKeyBtn" title="Control Panel" class="p-2 px-3 rounded-full bg-white/80 dark:bg-stone-800/80 hover:bg-white dark:hover:bg-stone-700 backdrop-blur shadow-sm text-xs font-medium hover:text-stone-900 dark:hover:text-white transition flex items-center space-x-1.5 border border-stone-200/50 dark:border-stone-700/60">
+        <i class="fa-solid fa-feather text-[11px] text-rose-500"></i>
+        <span class="hidden sm:inline">Sender Panel</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Now Playing Sub-bar -->
+  <div class="relative z-20 w-full max-w-xl mx-auto px-4 text-center">
+    <span id="nowPlayingText" class="text-[10px] text-stone-400 dark:text-stone-500 tracking-wide font-mono inline-flex items-center space-x-1.5 bg-white/40 dark:bg-stone-900/40 px-3 py-0.5 rounded-full border border-stone-200/40 dark:border-stone-800/40">
+      <i class="fa-solid fa-compact-disc"></i>
+      <span id="trackTitleDisplay">Hedwig's Theme (Lofi Magic Piano)</span>
+    </span>
+  </div>
+
+  <!-- Status Bar: Time & Together Days Counter -->
+  <section class="relative z-20 w-full max-w-xl mx-auto px-4 my-2">
+    <div class="bg-white/70 dark:bg-stone-900/70 backdrop-blur-md border border-stone-200/60 dark:border-stone-800/80 rounded-2xl p-3 sm:p-3.5 shadow-sm grid grid-cols-3 items-center text-center">
+      
+      <!-- City 1 Time -->
+      <div class="flex flex-col items-center">
+        <span class="text-[10px] uppercase font-bold tracking-wider text-stone-400 dark:text-stone-500 truncate max-w-[85px] sm:max-w-none" id="city1Name">My Time</span>
+        <span class="font-mono text-stone-700 dark:text-stone-200 font-semibold text-xs sm:text-sm mt-0.5" id="time1Display">--:--</span>
+      </div>
+
+      <!-- Days Together Counter -->
+      <div class="px-2 border-x border-stone-200/70 dark:border-stone-800 flex flex-col items-center">
+        <div class="flex items-center space-x-1 text-rose-500 dark:text-rose-400">
+          <i class="fa-solid fa-heart text-[10px]"></i>
+          <span class="text-[10px] uppercase font-bold tracking-wider">Days Together</span>
+        </div>
+        <span class="font-serif italic font-bold text-stone-800 dark:text-rose-200 text-sm sm:text-base tracking-tight mt-0.5" id="togetherCountDisplay">...</span>
+        <span class="text-[9px] text-stone-400 dark:text-stone-500 font-mono mt-0.5" id="startDateBadge">Since 15/12/2024</span>
+      </div>
+
+      <!-- City 2 Time -->
+      <div class="flex flex-col items-center">
+        <span class="text-[10px] uppercase font-bold tracking-wider text-stone-400 dark:text-stone-500 truncate max-w-[85px] sm:max-w-none" id="city2Name">Her Time</span>
+        <span class="font-mono text-stone-700 dark:text-stone-200 font-semibold text-xs sm:text-sm mt-0.5" id="time2Display">--:--</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Main Display Screen -->
+  <main class="relative z-20 w-full max-w-3xl mx-auto px-4 py-4 my-auto flex flex-col items-center justify-center">
+
+    <!-- View 1: Envelope Screen -->
+    <div id="envelopeView" class="w-full max-w-md mx-auto transition-all duration-700 transform flex flex-col items-center">
+      <div class="text-center mb-6">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-serif bg-rose-100 dark:bg-rose-950/70 text-rose-700 dark:text-rose-300 italic mb-2 tracking-wide border border-rose-200 dark:border-rose-900/50 shadow-sm">
+          A note of love across the distance
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-serif text-stone-800 dark:text-stone-100 font-semibold" id="envelopeSalutation">To My Beloved</h2>
+        <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">Tap the warm wax seal to unfold today's note</p>
+      </div>
+
+      <!-- Tactile Envelope graphic -->
+      <div class="relative w-72 sm:w-96 h-52 sm:h-56 rounded-2xl bg-amber-100/90 dark:bg-[#2b2520] shadow-2xl border border-amber-200/80 dark:border-stone-700/60 flex items-center justify-center overflow-hidden cursor-pointer group select-none transition-transform duration-300 hover:scale-[1.01]" id="envelopeWrapper">
+        
+        <!-- Flap Geometry -->
+        <div class="envelope-flap-top absolute inset-x-0 top-0 h-0 border-t-[98px] sm:border-t-[115px] border-t-amber-200/90 dark:border-t-[#3b322a] border-l-[144px] sm:border-l-[192px] border-l-transparent border-r-[144px] sm:border-r-[192px] border-r-transparent pointer-events-none z-10 drop-shadow-sm"></div>
+        <div class="absolute inset-x-0 bottom-0 h-0 border-b-[96px] sm:border-b-[110px] border-b-amber-200 dark:border-b-[#322a23] border-l-[144px] sm:border-l-[192px] border-l-amber-100 dark:border-l-[#26201b] border-r-[144px] sm:border-r-[192px] border-r-amber-100 dark:border-r-[#26201b] pointer-events-none z-0"></div>
+
+        <!-- Airmail Postage Stamp -->
+        <div class="absolute top-3 right-3 sm:top-4 sm:right-4 w-11 h-13 sm:w-12 sm:h-14 border-2 border-dashed border-rose-300 dark:border-rose-500/60 rounded bg-rose-50/70 dark:bg-rose-950/40 flex flex-col items-center justify-center rotate-3 shadow-inner pointer-events-none z-20">
+          <i class="fa-solid fa-wand-sparkles text-rose-400 dark:text-rose-400 text-xs sm:text-sm"></i>
+          <span class="text-[7px] sm:text-[8px] font-mono text-rose-500 dark:text-rose-400 mt-0.5 uppercase tracking-tighter">OWL POST</span>
+        </div>
+
+        <!-- Center Wax Seal Button -->
+        <button id="waxSealBtn" aria-label="Break Wax Seal" class="wax-seal relative z-20 w-16 h-16 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center text-white cursor-pointer select-none">
+          <i id="waxSealIcon" class="fa-solid fa-heart text-xl sm:text-2xl drop-shadow"></i>
+          <span class="text-[8px] sm:text-[9px] font-serif tracking-widest mt-1 uppercase font-semibold text-rose-100">Break Seal</span>
+        </button>
+      </div>
+
+      <div class="mt-6 sm:mt-8 flex items-center space-x-3">
+        <button id="surpriseLetterBtn" class="text-xs bg-white/90 dark:bg-stone-800/90 hover:bg-white dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 px-4 py-2 rounded-full border border-stone-200 dark:border-stone-700 shadow-sm transition flex items-center space-x-2">
+          <i class="fa-solid fa-shuffle text-rose-400"></i>
+          <span>Pick random note</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- View 2: Unfolded Letter Screen -->
+    <div id="letterView" class="hidden w-full max-w-2xl mx-auto transition-all duration-700 transform flex flex-col items-center">
+      
+      <!-- Stationery Paper Container -->
+      <article id="stationeryCard" class="w-full rounded-2xl p-6 sm:p-12 relative transition-all duration-300">
+        
+        <!-- Letter Header -->
+        <div class="flex items-start justify-between border-b border-stone-300/40 dark:border-stone-700/60 pb-4 mb-6">
+          <div class="pr-2">
+            <span id="letterCategoryTag" class="text-[10px] sm:text-[11px] font-sans font-semibold tracking-wider uppercase px-2.5 py-1 rounded-full bg-rose-100 dark:bg-rose-950/70 text-rose-700 dark:text-rose-300">
+              Category
+            </span>
+            <h2 id="letterTitle" class="text-xl sm:text-2xl md:text-3xl font-serif font-bold mt-2 text-stone-800 dark:text-stone-100 break-words">
+              Letter Title
+            </h2>
+          </div>
+          <div class="text-right shrink-0">
+            <span id="letterDate" class="text-xs font-serif italic text-stone-500 dark:text-stone-400 block">October 6, 2026</span>
+            <button id="toggleFavoriteLetterBtn" title="Favorite this note" class="mt-1 text-stone-300 dark:text-stone-600 hover:text-rose-500 dark:hover:text-rose-400 transition text-lg p-1">
+              <i class="fa-solid fa-heart" id="favHeartIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Handwritten Letter Body -->
+        <div id="letterContent" class="text-base sm:text-xl md:text-2xl leading-relaxed whitespace-pre-line my-4 font-normal min-h-[140px]">
+          Letter content goes here...
+        </div>
+
+        <!-- Signoff -->
+        <div class="mt-8 pt-4 border-t border-stone-300/40 dark:border-stone-700/60 flex flex-col items-end">
+          <span class="text-xs font-serif italic text-stone-400 dark:text-stone-500 mb-1" id="signoffLabel">Forever yours,</span>
+          <span id="senderSignature" class="text-2xl sm:text-3xl font-serif italic font-semibold text-rose-800 dark:text-rose-300">Your Love</span>
+        </div>
+
+        <!-- Bottom stamp / counter -->
+        <div class="absolute bottom-4 left-6 flex items-center space-x-2 opacity-60 text-stone-400 dark:text-stone-500 text-xs font-mono">
+          <i class="fa-solid fa-feather"></i>
+          <span id="letterCounterDisplay">Note #1</span>
+        </div>
+      </article>
+
+      <!-- Letter Action Toolbar -->
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <button id="foldBackBtn" class="px-5 py-2.5 rounded-full bg-white/90 dark:bg-stone-800 text-stone-700 dark:text-stone-200 text-xs font-medium border border-stone-200 dark:border-stone-700 shadow-sm hover:shadow transition flex items-center space-x-2">
+          <i class="fa-solid fa-envelope"></i>
+          <span>Fold back & seal</span>
+        </button>
+        <button id="nextLetterBtn" class="px-5 py-2.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium shadow-md transition flex items-center space-x-2">
+          <span>Read another note</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="relative z-20 py-3 text-center text-[11px] text-stone-400 dark:text-stone-600">
+    <p>Crafted with love across the miles</p>
+  </footer>
+
+  <!-- Admin Modal -->
+  <div id="adminModal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-white dark:bg-stone-900 text-stone-800 dark:text-stone-100 rounded-3xl max-w-2xl w-full max-h-[92vh] shadow-2xl overflow-hidden flex flex-col border border-stone-200 dark:border-stone-800">
+      
+      <!-- Modal Header -->
+      <div class="p-4 sm:p-5 border-b border-stone-100 dark:border-stone-800 flex items-center justify-between bg-stone-50 dark:bg-stone-900">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs shadow-sm">
+            <i class="fa-solid fa-feather-pointed"></i>
+          </div>
+          <div>
+            <h3 class="font-serif font-bold text-sm sm:text-base">Sender Control Room</h3>
+            <p class="text-[11px] text-stone-500 dark:text-stone-400">Craft personal notes and manage letters in bulk</p>
+          </div>
+        </div>
+        <button id="closeAdminBtn" aria-label="Close" class="w-8 h-8 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex border-b border-stone-200 dark:border-stone-800 text-xs font-medium bg-stone-50/50 dark:bg-stone-900/50 px-4 sm:px-5 space-x-3 overflow-x-auto">
+        <button class="admin-tab py-3 border-b-2 border-rose-600 text-rose-600 font-semibold whitespace-nowrap" data-tab="tab-messages">
+          <i class="fa-solid fa-envelope-open-text mr-1"></i> Letters (<span id="msgCountBadge">0</span>)
+        </button>
+        <button class="admin-tab py-3 border-b-2 border-transparent text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 whitespace-nowrap" data-tab="tab-bulk">
+          <i class="fa-solid fa-layer-group mr-1 text-rose-500"></i> Bulk Upload
+        </button>
+        <button class="admin-tab py-3 border-b-2 border-transparent text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 whitespace-nowrap" data-tab="tab-music">
+          <i class="fa-solid fa-music mr-1 text-amber-500"></i> Music Playlist
+        </button>
+        <button class="admin-tab py-3 border-b-2 border-transparent text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 whitespace-nowrap" data-tab="tab-design">
+          <i class="fa-solid fa-palette mr-1"></i> Aesthetics
+        </button>
+        <button class="admin-tab py-3 border-b-2 border-transparent text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 whitespace-nowrap" data-tab="tab-settings">
+          <i class="fa-solid fa-sliders mr-1"></i> Settings
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-4 sm:p-6 overflow-y-auto flex-1 space-y-6">
+
+        <!-- TAB 1: Letters Management -->
+        <div id="tab-messages" class="admin-tab-content space-y-4">
+          <div class="flex justify-between items-center">
+            <h4 class="text-xs sm:text-sm font-semibold">Saved Handwritten Letters</h4>
+            <div class="flex space-x-2">
+              <button id="openBulkTabQuickBtn" class="bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 hover:bg-rose-100 text-xs px-3 py-1.5 rounded-full font-medium transition flex items-center space-x-1 border border-rose-200 dark:border-rose-900">
+                <i class="fa-solid fa-layer-group text-[10px]"></i>
+                <span>Bulk Upload</span>
+              </button>
+              <button id="addNewMessageBtn" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-3.5 py-1.5 rounded-full font-medium shadow-sm transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-plus text-[10px]"></i>
+                <span>Write Note</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="messagesListContainer" class="space-y-2.5 max-h-64 sm:max-h-72 overflow-y-auto pr-1"></div>
+
+          <!-- Single Message Form -->
+          <form id="messageEditorForm" class="hidden bg-stone-50 dark:bg-stone-800/60 p-4 rounded-2xl border border-stone-200 dark:border-stone-700 space-y-3">
+            <div class="flex items-center justify-between">
+              <h5 class="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400" id="formHeading">Write New Note</h5>
+              <button type="button" id="cancelEditBtn" class="text-stone-400 hover:text-stone-600 text-xs">Cancel</button>
+            </div>
+            
+            <input type="hidden" id="editLetterId">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-medium mb-1">Note Title</label>
+                <input type="text" id="inputLetterTitle" required placeholder="e.g. When the stars remind me of you" class="w-full text-xs px-3 py-2 rounded-lg border border-stone-300 dark:border-stone-600 dark:bg-stone-900 focus:outline-rose-500">
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium mb-1">Occasion / Tag</label>
+                <select id="inputLetterCategory" class="w-full text-xs px-3 py-2 rounded-lg border border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-900 focus:outline-rose-500">
+                  <option value="Just Because">Just Because</option>
+                  <option value="When You Miss Me">When You Miss Me</option>
+                  <option value="Good Morning">Good Morning Sweetheart</option>
+                  <option value="Special Memory">Special Memory</option>
+                  <option value="Reunion Dreams">Reunion Dreams</option>
+                  <option value="A Secret Whisper">A Secret Whisper</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-medium mb-1">Letter Content</label>
+              <textarea id="inputLetterContent" rows="5" required placeholder="Write your heartfelt message..." class="w-full text-xs p-3 rounded-lg border border-stone-300 dark:border-stone-600 dark:bg-stone-900 focus:outline-rose-500 leading-relaxed"></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-2 pt-1">
+              <button type="button" id="cancelFormBtn" class="px-3 py-1.5 text-xs text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 rounded-lg">Cancel</button>
+              <button type="submit" class="px-4 py-1.5 text-xs bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-medium shadow-sm">Save Letter</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- TAB 2: BULK UPLOAD -->
+        <div id="tab-bulk" class="admin-tab-content hidden space-y-4">
+          <div class="bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/60 p-3.5 rounded-2xl">
+            <h4 class="text-xs sm:text-sm font-semibold text-rose-800 dark:text-rose-200 flex items-center space-x-1.5">
+              <i class="fa-solid fa-cloud-arrow-up text-rose-600"></i>
+              <span>Bulk Letters Importer</span>
+            </h4>
+            <p class="text-[11px] text-rose-700/80 dark:text-rose-300/80 mt-1 leading-relaxed">
+              Upload multiple love letters at once using a text file, paste-in batch, or JSON format. You can append them to your current collection or replace them.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="border-2 border-dashed border-stone-300 dark:border-stone-700 hover:border-rose-400 dark:hover:border-rose-500 p-4 rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer transition bg-stone-50/50 dark:bg-stone-800/40">
+              <i class="fa-solid fa-file-lines text-2xl text-rose-500 mb-2"></i>
+              <span class="text-xs font-semibold">Upload .txt or .json file</span>
+              <span class="text-[10px] text-stone-400 mt-0.5">Drag & drop or click to browse</span>
+              <input type="file" id="bulkFileInput" accept=".txt,.json,.md" class="hidden">
+            </label>
+
+            <div class="p-3.5 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800/40 text-[11px] space-y-1 text-stone-600 dark:text-stone-300">
+              <div class="font-semibold text-stone-800 dark:text-stone-100 flex items-center space-x-1">
+                <i class="fa-solid fa-circle-info text-rose-500"></i>
+                <span>Easy Text Format</span>
+              </div>
+              <p>Separate multiple letters using <code>---</code> or <code>===</code>.</p>
+              <p class="text-[10px] text-stone-400 font-mono bg-white dark:bg-stone-900 p-2 rounded border border-stone-200 dark:border-stone-700">
+                Title: My First Letter<br>
+                Category: When You Miss Me<br>
+                My sweetheart, I miss you...<br>
+                ---<br>
+                Title: Second Letter<br>
+                Good morning my love...
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-semibold">Or Paste Raw Content Here</label>
+              <button type="button" id="insertSampleBulkBtn" class="text-[11px] text-rose-600 hover:underline">Insert Sample Format</button>
+            </div>
+            <textarea id="bulkPasteTextarea" rows="6" placeholder="Paste your collection of letters here separated by ---" class="w-full text-xs p-3 rounded-xl border border-stone-300 dark:border-stone-700 dark:bg-stone-900 focus:outline-rose-500 leading-relaxed font-mono"></textarea>
+          </div>
+
+          <div class="bg-stone-50 dark:bg-stone-800/50 p-3.5 rounded-xl border border-stone-200 dark:border-stone-700 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center space-x-3 text-xs">
+              <label class="flex items-center space-x-1.5 cursor-pointer">
+                <input type="radio" name="bulkImportMode" value="append" checked class="text-rose-600 focus:ring-rose-500">
+                <span>Append to existing notes</span>
+              </label>
+              <label class="flex items-center space-x-1.5 cursor-pointer text-stone-500 hover:text-stone-800 dark:hover:text-stone-200">
+                <input type="radio" name="bulkImportMode" value="replace" class="text-rose-600 focus:ring-rose-500">
+                <span>Replace all notes</span>
+              </label>
+            </div>
+
+            <button id="processBulkBtn" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-4 py-2 rounded-lg font-medium shadow-sm transition flex items-center space-x-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>Parse & Import Letters</span>
+            </button>
+          </div>
+
+          <div id="bulkPreviewBox" class="hidden p-3.5 rounded-2xl border border-emerald-300 dark:border-emerald-800/70 bg-emerald-50/70 dark:bg-emerald-950/30 text-xs">
+            <div class="flex items-center justify-between text-emerald-800 dark:text-emerald-300 font-semibold mb-2">
+              <span id="bulkPreviewCountText">Found 0 letters</span>
+              <button id="confirmBulkSaveBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-medium shadow transition">
+                Confirm & Add to Collection
+              </button>
+            </div>
+            <div id="bulkPreviewList" class="max-h-36 overflow-y-auto space-y-1.5 pr-1 text-[11px] text-stone-600 dark:text-stone-300"></div>
+          </div>
+        </div>
+
+        <!-- TAB 3: Music Playlist (Harry Potter & Romantic Themes) -->
+        <div id="tab-music" class="admin-tab-content hidden space-y-4">
+          <div class="bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 p-3.5 rounded-2xl">
+            <h4 class="text-xs sm:text-sm font-semibold text-amber-900 dark:text-amber-200 flex items-center space-x-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles text-amber-600"></i>
+              <span>Curated Romantic & Harry Potter Soundtracks</span>
+            </h4>
+            <p class="text-[11px] text-amber-800/80 dark:text-amber-300/80 mt-1 leading-relaxed">
+              Choose from soft piano renditions of Harry Potter themes and tender romantic instrumentals to set the atmosphere while she reads.
+            </p>
+          </div>
+
+          <div class="space-y-2" id="playlistItemsContainer"></div>
+
+          <div class="bg-stone-50 dark:bg-stone-800/50 p-3.5 rounded-xl border border-stone-200 dark:border-stone-700 space-y-2">
+            <h5 class="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">Add Custom Background Song Link</h5>
+            <div class="flex space-x-2">
+              <input type="text" id="customSongTitle" placeholder="Song Title" class="w-1/3 text-xs px-2.5 py-1.5 rounded border border-stone-300 dark:border-stone-600 dark:bg-stone-900">
+              <input type="url" id="customSongUrl" placeholder="Direct MP3 Link (https://...)" class="w-2/3 text-xs px-2.5 py-1.5 rounded border border-stone-300 dark:border-stone-600 dark:bg-stone-900">
+            </div>
+            <button id="addCustomSongBtn" class="mt-1 bg-stone-800 dark:bg-stone-700 hover:bg-stone-900 text-white text-xs px-3 py-1.5 rounded-lg transition">Add to Playlist</button>
+          </div>
+        </div>
+
+        <!-- TAB 4: Design & Aesthetics -->
+        <div id="tab-design" class="admin-tab-content hidden space-y-5">
+          <div>
+            <label class="block text-xs font-semibold mb-2">Stationery Style</label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5" id="paperStyleOptions">
+              <button type="button" data-style="paper-parchment" class="style-choice-btn p-3 rounded-xl border text-left text-xs flex flex-col justify-between h-20 bg-[#fbf5e8] dark:bg-[#24201c] border-amber-300 dark:border-amber-800">
+                <span class="font-medium">Vintage Parchment</span>
+                <span class="text-[10px] text-stone-500">Warm & Classic</span>
+              </button>
+              <button type="button" data-style="paper-blush" class="style-choice-btn p-3 rounded-xl border text-left text-xs flex flex-col justify-between h-20 bg-[#fff2f2] dark:bg-[#2b181e] border-rose-200 dark:border-rose-900">
+                <span class="font-medium text-rose-900 dark:text-rose-200">Blush Petal</span>
+                <span class="text-[10px] text-rose-400">Soft & Tender</span>
+              </button>
+              <button type="button" data-style="paper-vintage-lines" class="style-choice-btn p-3 rounded-xl border text-left text-xs flex flex-col justify-between h-20 bg-[#faf7ee] dark:bg-[#1e1b18] border-stone-300 dark:border-stone-700">
+                <span class="font-medium">Notebook Lined</span>
+                <span class="text-[10px] text-stone-500">Journal feel</span>
+              </button>
+              <button type="button" data-style="paper-midnight" class="style-choice-btn p-3 rounded-xl border text-left text-xs flex flex-col justify-between h-20 bg-[#121324] text-white border-indigo-900">
+                <span class="font-medium text-indigo-100">Midnight Star</span>
+                <span class="text-[10px] text-indigo-300">Deep romantic</span>
+              </button>
+              <button type="button" data-style="paper-clean-cotton" class="style-choice-btn p-3 rounded-xl border text-left text-xs flex flex-col justify-between h-20 bg-white dark:bg-[#1c1917] border-stone-200 dark:border-stone-700">
+                <span class="font-medium">Clean Linen</span>
+                <span class="text-[10px] text-stone-500">Minimal modern</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            <div>
+              <label class="block text-xs font-semibold mb-1.5">Handwriting Typography</label>
+              <select id="settingFontFamily" class="w-full text-xs px-3 py-2 rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-800">
+                <option value="'Caveat', cursive">Caveat (Organic & Natural)</option>
+                <option value="'Dancing Script', cursive">Dancing Script (Elegant & Flowing)</option>
+                <option value="'Kalam', cursive">Kalam (Warm Casual Hand)</option>
+                <option value="'Sacramento', cursive">Sacramento (Vintage Cursive)</option>
+                <option value="'Marck Script', cursive">Marck Script (Romantic Quill)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold mb-1.5">Wax Seal Tint</label>
+              <select id="settingWaxColor" class="w-full text-xs px-3 py-2 rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-800">
+                <option value="#be123c">Crimson Wax</option>
+                <option value="#9d174d">Rose Wine</option>
+                <option value="#312e81">Midnight Navy</option>
+                <option value="#78350f">Antique Bronze</option>
+                <option value="#14532d">Sage Forest</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold mb-1.5">Delivery Order</label>
+            <select id="settingDeliveryMode" class="w-full text-xs px-3 py-2 rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-800">
+              <option value="random">Surprise Order (Random)</option>
+              <option value="daily">Daily Note (Synced to Calendar Day)</option>
+              <option value="sequential">Chronological (Letter 1, Letter 2...)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- TAB 5: Settings & Together Counter Sync -->
+        <div id="tab-settings" class="admin-tab-content hidden space-y-4">
+          <div class="bg-stone-50 dark:bg-stone-800/50 p-4 rounded-xl border border-stone-200 dark:border-stone-700 space-y-3">
+            <h5 class="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">Relationship Journey & Counter</h5>
+            <div>
+              <label class="block text-[11px] font-medium mb-1">Days Together Start Date</label>
+              <input type="date" id="settingTogetherStartDate" class="text-xs px-3 py-2 rounded border border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-900 w-full sm:w-1/2">
+              <p class="text-[10px] text-stone-500 mt-1">Default is set to 15/12/2024</p>
+            </div>
+          </div>
+
+          <div class="bg-stone-50 dark:bg-stone-800/50 p-4 rounded-xl border border-stone-200 dark:border-stone-700 space-y-3">
+            <h5 class="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">Two Time Zones</h5>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-medium mb-1">Your City Label & UTC Offset</label>
+                <div class="flex space-x-1.5">
+                  <input type="text" id="settingCity1" placeholder="My City (e.g. Kuwait)" class="w-2/3 text-xs px-2.5 py-1.5 rounded border border-stone-300 dark:border-stone-600 dark:bg-stone-900">
+                  <input type="number" id="settingOffset1" placeholder="UTC±" class="w-1/3 text-xs px-2 py-1.5 rounded border border-stone-300 dark:border-stone-600 dark:bg-stone-900" step="0.5">
+                </div>
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium mb-1">Her City Label & UTC Offset</label>
+                <div class="flex space-x-1.5">
+                  <input type="text" id="settingCity2" placeholder="Her City (e.g. Kerala)" class="w-2/3 text-xs px-2.5 py-1.5 rounded border border-stone-300 dark:border-stone-600 dark:bg-stone-900">
+                  <input type="number" id="settingOffset2" placeholder="UTC±" class="w-1/3 text-xs px-2 py-1.5 rounded border border-stone-300 dark:border-stone-600 dark:bg-stone-900" step="0.5">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-stone-50 dark:bg-stone-800/50 p-4 rounded-xl border border-stone-200 dark:border-stone-700 space-y-3">
+            <h5 class="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">Signatures & Greetings</h5>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-medium mb-1">Her Name / Envelope Greeting</label>
+                <input type="text" id="settingHerName" placeholder="To My Beloved" class="text-xs px-2.5 py-1.5 rounded border border-stone-300 dark:border-stone-600 dark:bg-stone-900 w-full">
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium mb-1">Your Handwritten Sign-off</label>
+                <input type="text" id="settingSenderName" placeholder="Forever & always yours" class="text-xs px-2.5 py-1.5 rounded border border-stone-300 dark:border-stone-600 dark:bg-stone-900 w-full">
+              </div>
+            </div>
+          </div>
+
+          <!-- Backup & Data Export -->
+          <div class="bg-stone-50 dark:bg-stone-800/50 p-4 rounded-xl border border-stone-200 dark:border-stone-700 space-y-2">
+            <h5 class="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">Backup & Restore</h5>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <button id="exportDataBtn" class="bg-stone-800 dark:bg-stone-700 hover:bg-stone-900 text-white text-xs px-3.5 py-2 rounded-lg transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-download"></i>
+                <span>Download Backup</span>
+              </button>
+              <label class="bg-white dark:bg-stone-800 hover:bg-stone-100 text-stone-700 dark:text-stone-200 border border-stone-300 dark:border-stone-600 text-xs px-3.5 py-2 rounded-lg cursor-pointer transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-upload"></i>
+                <span>Restore Backup</span>
+                <input type="file" id="importDataInput" accept=".json" class="hidden">
+              </label>
+              <button id="resetDefaultsBtn" class="text-xs text-rose-600 hover:text-rose-700 px-3 py-2 transition ml-auto">
+                Reset Sample Letters
+              </button>
+            </div>
+          </div>
+
+          <!-- PIN configuration -->
+          <div class="pt-2 flex items-center justify-between text-xs text-stone-500 dark:text-stone-400 border-t border-stone-200 dark:border-stone-700">
+            <span>Passcode Lock:</span>
+            <div class="flex items-center space-x-2">
+              <input type="password" id="settingAdminPin" maxlength="6" value="1234" class="text-xs w-20 px-2 py-1 border border-stone-300 dark:border-stone-600 dark:bg-stone-900 rounded text-center">
+              <span class="text-[10px] text-stone-400">(Default: 1234)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900 flex justify-between items-center">
+        <span class="text-xs text-stone-400" id="syncStatusNotice">Changes saved locally</span>
+        <button id="saveAdminChangesBtn" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium px-5 py-2 rounded-full shadow transition">
+          Apply & Return
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PIN Modal -->
+  <div id="pinModal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-stone-900 text-stone-800 dark:text-stone-100 rounded-2xl max-w-xs w-full p-6 text-center shadow-xl border border-stone-200 dark:border-stone-800">
+      <div class="w-12 h-12 bg-rose-100 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 rounded-full flex items-center justify-center mx-auto mb-3 text-lg">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h3 class="font-serif font-bold text-base">Sender Passcode</h3>
+      <p class="text-xs text-stone-500 dark:text-stone-400 mt-1 mb-4">Enter PIN to customize notes</p>
+      
+      <input type="password" id="pinInput" placeholder="••••" maxlength="6" class="w-36 text-center text-lg tracking-widest font-mono py-2 border border-stone-300 dark:border-stone-600 dark:bg-stone-800 rounded-lg mx-auto block mb-4 focus:outline-rose-500">
+      
+      <div class="flex space-x-2">
+        <button id="cancelPinBtn" class="flex-1 py-2 text-xs text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg">Cancel</button>
+        <button id="submitPinBtn" class="flex-1 py-2 text-xs bg-rose-600 hover:bg-rose-700 text-white font-medium rounded-lg shadow-sm">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* Default Letters Database */
+    const DEFAULT_LETTERS = [
+      {
+        id: "letter-1",
+        title: "Miles mean so little when you mean so much",
+        category: "When You Miss Me",
+        date: "October 6, 2026",
+        content: "My sweetest,\n\nIf you are reading this right now and feeling the quiet weight of the distance, please close your eyes for one breath. Imagine my arms wrapped around your shoulders, pulling you close against the chill of the evening.\n\nThe miles between our cities may be vast, but no map has the power to measure how present you are in my every thought. Every coffee I sip, every street corner I turn, you are there with me.\n\nYou are my home, no matter where I sleep tonight.",
+        favorite: true,
+        readCount: 0
+      },
+      {
+        id: "letter-2",
+        title: "The morning light reminded me of you",
+        category: "Good Morning",
+        date: "October 5, 2026",
+        content: "Good morning, my love.\n\nThe sunrise just hit my window with that gentle honey glow that always reminds me of the way you smile right after waking up—a little sleepy, soft, and breathtakingly beautiful.\n\nTake your time today. Drink your water, walk softly, and carry with you the certainty that someone across the ocean is unconditionally proud of you and cheering for your heart.",
+        favorite: false,
+        readCount: 0
+      },
+      {
+        id: "letter-3",
+        title: "Counting our days and holding our dreams",
+        category: "Reunion Dreams",
+        date: "October 4, 2026",
+        content: "Looking back at all the days we have built together since December 15, 2024 fills me with so much peace.\n\nEvery single day has been an anchor. When that gate opens and I see your eyes again, every second of waiting will dissolve into pure joy.\n\nWe are walking this road together, hand in hand across every mile.",
+        favorite: false,
+        readCount: 0
+      },
+      {
+        id: "letter-4",
+        title: "Just a reminder: You are my greatest peace",
+        category: "Just Because",
+        date: "October 3, 2026",
+        content: "People ask how we do this—how we endure the time zones, the grainy video calls, and the empty side of the bed.\n\nThe answer is simple: Loving you is the easiest, truest thing I have ever done. You make ordinary days sparkle, even through a screen.\n\nThank you for choosing me every single day.",
+        favorite: true,
+        readCount: 0
+      }
+    ];
+
+    /* Romantic and Harry Potter Curated Tracklist */
+    const PLAYLIST = [
+      {
+        title: "Hedwig's Theme (Lofi Magic Piano)",
+        tag: "Harry Potter",
+        url: "https://ia601409.us.archive.org/21/items/hedwigs-theme-piano/hedwigs_theme_piano_soft.mp3",
+        backup: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"
+      },
+      {
+        title: "Dumbledore's Farewell & Lily's Theme (Gentle Strings)",
+        tag: "Harry Potter & Nostalgia",
+        url: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3"
+      },
+      {
+        title: "Tender Romance (Acoustic Piano & Cello)",
+        tag: "Romantic",
+        url: "https://cdn.pixabay.com/download/audio/2022/11/06/audio_c93e43d61f.mp3"
+      },
+      {
+        title: "Golden Hour Glow (Warm Cinematic Piano)",
+        tag: "Romantic",
+        url: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3"
+      }
+    ];
+
+    const DEFAULT_CONFIG = {
+      darkMode: false,
+      togetherStartDate: "2024-12-15",
+      adminPin: "1234",
+      herName: "To My Dearest Wife",
+      senderName: "Forever & always yours",
+      paperStyle: "paper-parchment",
+      fontFamily: "'Caveat', cursive",
+      waxColor: "#be123c",
+      deliveryMode: "random",
+      city1: "Kuwait",
+      offset1: 3,
+      city2: "Kerala",
+      offset2: 5.5,
+      petalsEnabled: true,
+      musicEnabled: false,
+      currentTrackIndex: 0,
+      playlist: PLAYLIST
+    };
+
+    let letters = [];
+    let config = {};
+    let currentLetter = null;
+    let petalsInterval = null;
+    let stagedBulkLetters = [];
+
+    /* Theme Handler */
+    function applyTheme() {
+      const htmlEl = document.documentElement;
+      const themeIcon = document.getElementById("themeIcon");
+      if (config.darkMode) {
+        htmlEl.classList.add("dark");
+        if (themeIcon) {
+          themeIcon.className = "fa-solid fa-sun text-amber-400 text-xs sm:text-sm";
+        }
+      } else {
+        htmlEl.classList.remove("dark");
+        if (themeIcon) {
+          themeIcon.className = "fa-solid fa-moon text-stone-600 text-xs sm:text-sm";
+        }
+      }
+    }
+
+    function toggleTheme() {
+      config.darkMode = !config.darkMode;
+      saveConfig();
+      applyTheme();
+    }
+
+    /* Background Song Player Engine */
+    const bgPlayer = document.getElementById("bgMusicPlayer");
+
+    function loadTrack(index) {
+      const list = config.playlist || PLAYLIST;
+      if (!list || list.length === 0) return;
+      config.currentTrackIndex = (index + list.length) % list.length;
+      const track = list[config.currentTrackIndex];
+      bgPlayer.src = track.url;
+      document.getElementById("trackTitleDisplay").textContent = `${track.title} [${track.tag || 'Romantic'}]`;
+      saveConfig();
+      renderPlaylistUI();
+    }
+
+    function toggleMusicPlayback() {
+      const btn = document.getElementById("toggleMusicBtn");
+      const icon = document.getElementById("musicStatusIcon");
+
+      if (!bgPlayer.src) {
+        loadTrack(config.currentTrackIndex || 0);
+      }
+
+      if (bgPlayer.paused) {
+        bgPlayer.volume = 0.45;
+        bgPlayer.play().then(() => {
+          config.musicEnabled = true;
+          btn.classList.add("text-rose-500", "dark:text-rose-400", "ring-2", "ring-rose-400");
+          icon.className = "fa-solid fa-volume-high text-xs sm:text-sm animate-pulse";
+          saveConfig();
+        }).catch(() => {
+          // If error loading remote file, fallback to romantic backup
+          const list = config.playlist || PLAYLIST;
+          const current = list[config.currentTrackIndex];
+          if (current && current.backup) {
+            bgPlayer.src = current.backup;
+            bgPlayer.play().catch(() => {});
+          }
+        });
+      } else {
+        bgPlayer.pause();
+        config.musicEnabled = false;
+        btn.classList.remove("text-rose-500", "dark:text-rose-400", "ring-2", "ring-rose-400");
+        icon.className = "fa-solid fa-music text-xs sm:text-sm";
+        saveConfig();
+      }
+    }
+
+    function nextTrack() {
+      loadTrack((config.currentTrackIndex || 0) + 1);
+      if (config.musicEnabled) {
+        bgPlayer.play().catch(() => {});
+      }
+    }
+
+    bgPlayer.addEventListener("ended", () => {
+      nextTrack();
+    });
+
+    function renderPlaylistUI() {
+      const container = document.getElementById("playlistItemsContainer");
+      if (!container) return;
+      container.innerHTML = "";
+      const list = config.playlist || PLAYLIST;
+
+      list.forEach((t, i) => {
+        const isCurrent = i === (config.currentTrackIndex || 0);
+        const row = document.createElement("div");
+        row.className = `p-3 rounded-xl border flex items-center justify-between text-xs transition cursor-pointer ${
+          isCurrent 
+            ? 'bg-rose-50/80 dark:bg-rose-950/40 border-rose-300 dark:border-rose-800' 
+            : 'bg-white dark:bg-stone-800/80 border-stone-200 dark:border-stone-700 hover:border-rose-300'
+        }`;
+
+        row.innerHTML = `
+          <div class="flex items-center space-x-2.5 min-w-0 pr-2">
+            <span class="w-6 h-6 rounded-full ${isCurrent ? 'bg-rose-500 text-white' : 'bg-stone-100 dark:bg-stone-700 text-stone-500'} flex items-center justify-center text-[10px]">
+              <i class="fa-solid ${isCurrent ? 'fa-play' : 'fa-music'}"></i>
+            </span>
+            <div class="truncate">
+              <span class="font-semibold text-stone-800 dark:text-stone-100 block truncate">${t.title}</span>
+              <span class="text-[10px] text-stone-400">${t.tag || 'Soundtrack'}</span>
+            </div>
+          </div>
+          <button class="px-2.5 py-1 rounded bg-stone-100 dark:bg-stone-700 text-[10px] font-semibold text-stone-600 dark:text-stone-300 hover:bg-rose-600 hover:text-white transition">
+            ${isCurrent && !bgPlayer.paused ? 'Playing' : 'Play'}
+          </button>
+        `;
+
+        row.onclick = () => {
+          loadTrack(i);
+          if (bgPlayer.paused) toggleMusicPlayback();
+          else bgPlayer.play().catch(() => {});
+        };
+
+        container.appendChild(row);
+      });
+    }
+
+    /* State Manager */
+    function loadState() {
+      const storedLetters = localStorage.getItem("whispers_letters_db");
+      if (storedLetters) {
+        try {
+          letters = JSON.parse(storedLetters);
+        } catch (e) {
+          letters = [...DEFAULT_LETTERS];
+        }
+      } else {
+        letters = [...DEFAULT_LETTERS];
+        saveLetters();
+      }
+
+      const storedConfig = localStorage.getItem("whispers_config_db");
+      if (storedConfig) {
+        try {
+          config = { ...DEFAULT_CONFIG, ...JSON.parse(storedConfig) };
+        } catch (e) {
+          config = { ...DEFAULT_CONFIG };
+        }
+      } else {
+        config = { ...DEFAULT_CONFIG };
+        saveConfig();
+      }
+
+      if (!config.playlist || config.playlist.length === 0) {
+        config.playlist = PLAYLIST;
+      }
+      if (!config.togetherStartDate) {
+        config.togetherStartDate = "2024-12-15";
+      }
+    }
+
+    function saveLetters() {
+      localStorage.setItem("whispers_letters_db", JSON.stringify(letters));
+      updateLetterCountBadge();
+    }
+
+    function saveConfig() {
+      localStorage.setItem("whispers_config_db", JSON.stringify(config));
+    }
+
+    function applyDesignConfig() {
+      const waxBtn = document.getElementById("waxSealBtn");
+      if (waxBtn) waxBtn.style.backgroundColor = config.waxColor;
+
+      document.getElementById("envelopeSalutation").textContent = config.herName || "To My Beloved";
+      document.getElementById("senderSignature").textContent = config.senderName || "With all my love";
+
+      const stationery = document.getElementById("stationeryCard");
+      if (stationery) {
+        stationery.className = `w-full rounded-2xl p-6 sm:p-12 relative transition-all duration-300 ${config.paperStyle}`;
+      }
+
+      const letterContent = document.getElementById("letterContent");
+      const letterTitle = document.getElementById("letterTitle");
+      const senderSig = document.getElementById("senderSignature");
+      if (letterContent) letterContent.style.fontFamily = config.fontFamily;
+      if (letterTitle) letterTitle.style.fontFamily = config.fontFamily;
+      if (senderSig) senderSig.style.fontFamily = config.fontFamily;
+
+      document.getElementById("settingFontFamily").value = config.fontFamily;
+      document.getElementById("settingWaxColor").value = config.waxColor;
+      document.getElementById("settingDeliveryMode").value = config.deliveryMode;
+      document.getElementById("settingCity1").value = config.city1;
+      document.getElementById("settingOffset1").value = config.offset1;
+      document.getElementById("settingCity2").value = config.city2;
+      document.getElementById("settingOffset2").value = config.offset2;
+      document.getElementById("settingTogetherStartDate").value = config.togetherStartDate;
+      document.getElementById("settingHerName").value = config.herName;
+      document.getElementById("settingSenderName").value = config.senderName;
+      document.getElementById("settingAdminPin").value = config.adminPin;
+
+      document.querySelectorAll(".style-choice-btn").forEach(btn => {
+        if (btn.getAttribute("data-style") === config.paperStyle) {
+          btn.classList.add("ring-2", "ring-rose-500", "scale-[1.02]");
+        } else {
+          btn.classList.remove("ring-2", "ring-rose-500", "scale-[1.02]");
+        }
+      });
+
+      document.getElementById("city1Name").textContent = config.city1 || "My Time";
+      document.getElementById("city2Name").textContent = config.city2 || "Her Time";
+    }
+
+    function updateClocksAndTogetherDays() {
+      const now = new Date();
+      const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const time1 = new Date(utcTime + (3600000 * parseFloat(config.offset1 || 0)));
+      const time2 = new Date(utcTime + (3600000 * parseFloat(config.offset2 || 0)));
+
+      const formatTime = d => d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+      document.getElementById("time1Display").textContent = formatTime(time1);
+      document.getElementById("time2Display").textContent = formatTime(time2);
+
+      const startDateParts = (config.togetherStartDate || "2024-12-15").split("-");
+      const startDate = new Date(parseInt(startDateParts[0]), parseInt(startDateParts[1]) - 1, parseInt(startDateParts[2]), 0, 0, 0);
+
+      const diffMs = now.getTime() - startDate.getTime();
+      if (diffMs >= 0) {
+        const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const totalHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById("togetherCountDisplay").textContent = `${totalDays} Days, ${totalHours}h`;
+      } else {
+        document.getElementById("togetherCountDisplay").textContent = "Just beginning ❤️";
+      }
+
+      const formattedBadgeDate = `${startDateParts[2]}/${startDateParts[1]}/${startDateParts[0]}`;
+      document.getElementById("startDateBadge").textContent = `Since ${formattedBadgeDate}`;
+    }
+
+    function selectLetterForViewing() {
+      if (!letters || letters.length === 0) {
+        currentLetter = {
+          id: "empty",
+          title: "Waiting for your words",
+          category: "Welcome",
+          date: new Date().toLocaleDateString(),
+          content: "You haven't written any letters yet! Open the sender panel in the top right to write your notes or upload them in bulk.",
+          favorite: false
+        };
+        return currentLetter;
+      }
+
+      if (config.deliveryMode === "sequential") {
+        const sorted = [...letters].sort((a,b) => (a.readCount || 0) - (b.readCount || 0));
+        currentLetter = sorted[0];
+      } else if (config.deliveryMode === "daily") {
+        const todayStr = new Date().toDateString();
+        let hash = 0;
+        for (let i = 0; i < todayStr.length; i++) {
+          hash = (hash << 5) - hash + todayStr.charCodeAt(i);
+        }
+        const index = Math.abs(hash) % letters.length;
+        currentLetter = letters[index];
+      } else {
+        const randomIndex = Math.floor(Math.random() * letters.length);
+        currentLetter = letters[randomIndex];
+      }
+
+      return currentLetter;
+    }
+
+    function renderCurrentLetter() {
+      if (!currentLetter) selectLetterForViewing();
+
+      document.getElementById("letterTitle").textContent = currentLetter.title;
+      document.getElementById("letterCategoryTag").textContent = currentLetter.category || "Letter";
+      document.getElementById("letterDate").textContent = currentLetter.date || "Just now";
+      document.getElementById("letterContent").textContent = currentLetter.content;
+
+      const heartIcon = document.getElementById("favHeartIcon");
+      if (currentLetter.favorite) {
+        heartIcon.classList.add("text-rose-500");
+        heartIcon.classList.remove("text-stone-300", "dark:text-stone-600");
+      } else {
+        heartIcon.classList.remove("text-rose-500");
+        heartIcon.classList.add("text-stone-300", "dark:text-stone-600");
+      }
+
+      const letterIndex = letters.findIndex(l => l.id === currentLetter.id);
+      document.getElementById("letterCounterDisplay").textContent = `Note ${letterIndex >= 0 ? letterIndex + 1 : 1} of ${letters.length}`;
+
+      if (currentLetter.id !== "empty") {
+        currentLetter.readCount = (currentLetter.readCount || 0) + 1;
+        saveLetters();
+      }
+    }
+
+    function openEnvelope() {
+      const envelopeView = document.getElementById("envelopeView");
+      const letterView = document.getElementById("letterView");
+      const envelopeWrapper = document.getElementById("envelopeWrapper");
+
+      envelopeWrapper.classList.add("envelope-open");
+
+      setTimeout(() => {
+        envelopeView.classList.add("scale-95", "opacity-0");
+        setTimeout(() => {
+          envelopeView.classList.add("hidden");
+          envelopeWrapper.classList.remove("envelope-open");
+
+          letterView.classList.remove("hidden");
+          letterView.classList.add("opacity-0", "scale-95");
+
+          renderCurrentLetter();
+
+          setTimeout(() => {
+            letterView.classList.remove("opacity-0", "scale-95");
+            letterView.classList.add("opacity-100", "scale-100");
+          }, 50);
+        }, 300);
+      }, 250);
+    }
+
+    function closeEnvelope() {
+      const envelopeView = document.getElementById("envelopeView");
+      const letterView = document.getElementById("letterView");
+
+      letterView.classList.remove("opacity-100", "scale-100");
+      letterView.classList.add("opacity-0", "scale-95");
+
+      setTimeout(() => {
+        letterView.classList.add("hidden");
+        envelopeView.classList.remove("hidden");
+
+        setTimeout(() => {
+          envelopeView.classList.remove("scale-95", "opacity-0");
+        }, 50);
+      }, 350);
+    }
+
+    function spawnPetal() {
+      if (!config.petalsEnabled) return;
+      const container = document.getElementById("ambientContainer");
+      if (!container) return;
+
+      const petal = document.createElement("div");
+      petal.className = "petal";
+      
+      const petalTypes = ["🌸", "✨", "🤍", "🍂", "🌷", "🌹"];
+      petal.textContent = petalTypes[Math.floor(Math.random() * petalTypes.length)];
+      petal.style.fontSize = `${Math.random() * 12 + 10}px`;
+      petal.style.left = `${Math.random() * 100}vw`;
+      const duration = Math.random() * 5 + 6.5;
+      petal.style.animationDuration = `${duration}s`;
+      petal.style.opacity = (Math.random() * 0.4 + 0.35).toString();
+
+      container.appendChild(petal);
+
+      setTimeout(() => {
+        petal.remove();
+      }, duration * 1000);
+    }
+
+    function setupPetals(enable) {
+      config.petalsEnabled = enable;
+      const btn = document.getElementById("togglePetalsBtn");
+      if (enable) {
+        btn.classList.add("text-rose-500");
+        if (!petalsInterval) petalsInterval = setInterval(spawnPetal, 1300);
+      } else {
+        btn.classList.remove("text-rose-500");
+        if (petalsInterval) {
+          clearInterval(petalsInterval);
+          petalsInterval = null;
+        }
+        document.getElementById("ambientContainer").innerHTML = "";
+      }
+    }
+
+    function renderAdminMessagesList() {
+      const container = document.getElementById("messagesListContainer");
+      container.innerHTML = "";
+
+      if (letters.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-xs text-stone-400">No letters written yet. Tap 'Write Note' or use 'Bulk Upload' to add one.</div>`;
+        return;
+      }
+
+      letters.forEach((item) => {
+        const row = document.createElement("div");
+        row.className = "p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800/80 hover:border-rose-400 dark:hover:border-rose-500 transition flex items-center justify-between";
+        row.innerHTML = `
+          <div class="flex-1 min-w-0 pr-2">
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-stone-100 dark:bg-stone-700 text-stone-600 dark:text-stone-300">${item.category || 'Note'}</span>
+              ${item.favorite ? '<i class="fa-solid fa-heart text-rose-500 text-[10px]"></i>' : ''}
+              <span class="text-xs text-stone-400">${item.date || ''}</span>
+            </div>
+            <h5 class="text-xs font-semibold text-stone-800 dark:text-stone-100 truncate mt-1">${item.title}</h5>
+            <p class="text-[11px] text-stone-500 dark:text-stone-400 truncate">${item.content.substring(0, 60)}...</p>
+          </div>
+          <div class="flex items-center space-x-1 shrink-0">
+            <button class="edit-msg-btn p-1.5 rounded hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-500 hover:text-stone-800 dark:hover:text-white text-xs" data-id="${item.id}" title="Edit Letter">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button class="preview-msg-btn p-1.5 rounded hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-500 hover:text-rose-500 text-xs" data-id="${item.id}" title="Read Now">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+            <button class="delete-msg-btn p-1.5 rounded hover:bg-rose-50 dark:hover:bg-rose-950/50 text-stone-400 hover:text-rose-600 text-xs" data-id="${item.id}" title="Delete Letter">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      container.querySelectorAll(".edit-msg-btn").forEach(b => {
+        b.onclick = () => openMessageEditor(b.getAttribute("data-id"));
+      });
+      container.querySelectorAll(".preview-msg-btn").forEach(b => {
+        b.onclick = () => {
+          const lId = b.getAttribute("data-id");
+          currentLetter = letters.find(l => l.id === lId);
+          closeAdminModal();
+          openEnvelope();
+        };
+      });
+      container.querySelectorAll(".delete-msg-btn").forEach(b => {
+        b.onclick = () => {
+          const lId = b.getAttribute("data-id");
+          letters = letters.filter(l => l.id !== lId);
+          saveLetters();
+          renderAdminMessagesList();
+        };
+      });
+    }
+
+    function openMessageEditor(letterId = null) {
+      const form = document.getElementById("messageEditorForm");
+      form.classList.remove("hidden");
+
+      if (letterId) {
+        const item = letters.find(l => l.id === letterId);
+        if (item) {
+          document.getElementById("formHeading").textContent = "Edit Letter";
+          document.getElementById("editLetterId").value = item.id;
+          document.getElementById("inputLetterTitle").value = item.title;
+          document.getElementById("inputLetterCategory").value = item.category;
+          document.getElementById("inputLetterContent").value = item.content;
+        }
+      } else {
+        document.getElementById("formHeading").textContent = "Write New Note";
+        document.getElementById("editLetterId").value = "";
+        document.getElementById("inputLetterTitle").value = "";
+        document.getElementById("inputLetterCategory").value = "Just Because";
+        document.getElementById("inputLetterContent").value = "";
+      }
+      form.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeMessageEditor() {
+      document.getElementById("messageEditorForm").classList.add("hidden");
+    }
+
+    function updateLetterCountBadge() {
+      const badge = document.getElementById("msgCountBadge");
+      if (badge) badge.textContent = letters.length.toString();
+    }
+
+    /* Bulk Upload Engine */
+    function parseBulkLettersRaw(rawText) {
+      if (!rawText || !rawText.trim()) return [];
+      const trimmed = rawText.trim();
+
+      if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            return parsed.map((item, idx) => sanitizeLetterObject(item, idx));
+          }
+          if (parsed.letters && Array.isArray(parsed.letters)) {
+            return parsed.letters.map((item, idx) => sanitizeLetterObject(item, idx));
+          }
+        } catch (e) {}
+      }
+
+      const chunks = trimmed.split(/\n\s*(?:---+|===+|###\s+)\s*\n/);
+      const parsedNotes = [];
+
+      chunks.forEach((chunk, index) => {
+        const cleanedChunk = chunk.trim();
+        if (!cleanedChunk) return;
+
+        let title = `Love Note #${letters.length + index + 1}`;
+        let category = "Just Because";
+        let date = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        let contentLines = [];
+
+        const lines = cleanedChunk.split("\n");
+        let parsingHeaders = true;
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const lower = line.toLowerCase().trim();
+
+          if (parsingHeaders && lower.startsWith("title:")) {
+            title = line.substring(line.indexOf(":") + 1).trim();
+          } else if (parsingHeaders && (lower.startsWith("category:") || lower.startsWith("tag:"))) {
+            category = line.substring(line.indexOf(":") + 1).trim();
+          } else if (parsingHeaders && lower.startsWith("date:")) {
+            date = line.substring(line.indexOf(":") + 1).trim();
+          } else {
+            parsingHeaders = false;
+            contentLines.push(line);
+          }
+        }
+
+        const bodyContent = contentLines.join("\n").trim();
+        if (bodyContent) {
+          parsedNotes.push({
+            id: `letter-${Date.now()}-${index}-${Math.floor(Math.random()*1000)}`,
+            title: title || `Letter ${index + 1}`,
+            category: category || "Just Because",
+            date: date || new Date().toLocaleDateString(),
+            content: bodyContent,
+            favorite: false,
+            readCount: 0
+          });
+        }
+      });
+
+      return parsedNotes;
+    }
+
+    function sanitizeLetterObject(item, idx) {
+      return {
+        id: item.id || `letter-${Date.now()}-${idx}`,
+        title: item.title || `Letter #${idx + 1}`,
+        category: item.category || "Just Because",
+        date: item.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+        content: item.content || item.text || item.body || "",
+        favorite: !!item.favorite,
+        readCount: item.readCount || 0
+      };
+    }
+
+    function stageBulkPreview(parsed) {
+      stagedBulkLetters = parsed.filter(p => p.content.trim().length > 0);
+      const previewBox = document.getElementById("bulkPreviewBox");
+      const previewList = document.getElementById("bulkPreviewList");
+      const countText = document.getElementById("bulkPreviewCountText");
+
+      if (stagedBulkLetters.length === 0) {
+        previewBox.classList.add("hidden");
+        alert("No valid letters found. Ensure notes are separated by ---");
+        return;
+      }
+
+      previewBox.classList.remove("hidden");
+      countText.textContent = `Found ${stagedBulkLetters.length} letter${stagedBulkLetters.length > 1 ? 's' : ''} ready to import:`;
+      previewList.innerHTML = stagedBulkLetters.map((l, idx) => `
+        <div class="p-2 rounded bg-white dark:bg-stone-900 border border-emerald-200 dark:border-emerald-900/60 flex items-center justify-between">
+          <div class="truncate pr-2">
+            <span class="font-bold text-emerald-800 dark:text-emerald-300">#${idx + 1}: ${l.title}</span>
+            <span class="text-[10px] text-stone-400 dark:text-stone-500 block truncate">${l.content.substring(0, 45)}...</span>
+          </div>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 uppercase">${l.category}</span>
+        </div>
+      `).join("");
+    }
+
+    function switchAdminTab(targetTabId) {
+      document.querySelectorAll(".admin-tab").forEach(t => {
+        t.classList.remove("border-rose-600", "text-rose-600", "font-semibold");
+        t.classList.add("border-transparent", "text-stone-400");
+      });
+      document.querySelectorAll(".admin-tab-content").forEach(c => c.classList.add("hidden"));
+
+      const activeBtn = document.querySelector(`.admin-tab[data-tab="${targetTabId}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add("border-rose-600", "text-rose-600", "font-semibold");
+        activeBtn.classList.remove("border-transparent", "text-stone-400");
+      }
+      const targetContent = document.getElementById(targetTabId);
+      if (targetContent) targetContent.classList.remove("hidden");
+    }
+
+    function exportDatabaseToJson() {
+      const payload = {
+        whispersVersion: "2.5",
+        exportDate: new Date().toISOString(),
+        config: config,
+        letters: letters
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `whispers_letters_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importDatabaseFromJson(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const parsed = JSON.parse(evt.target.result);
+          if (parsed.letters && Array.isArray(parsed.letters)) {
+            letters = parsed.letters;
+            saveLetters();
+          }
+          if (parsed.config && typeof parsed.config === "object") {
+            config = { ...config, ...parsed.config };
+            saveConfig();
+            applyTheme();
+            applyDesignConfig();
+          }
+          renderAdminMessagesList();
+          renderPlaylistUI();
+          const notice = document.getElementById("syncStatusNotice");
+          notice.textContent = "Letters restored successfully! ✨";
+          setTimeout(() => notice.textContent = "Changes saved locally", 3000);
+        } catch (err) {
+          const notice = document.getElementById("syncStatusNotice");
+          notice.textContent = "Could not parse JSON file.";
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function closeAdminModal() {
+      document.getElementById("adminModal").classList.add("hidden");
+    }
+
+    /* Initialize Application */
+    window.addEventListener("DOMContentLoaded", () => {
+      loadState();
+      applyTheme();
+      applyDesignConfig();
+      updateClocksAndTogetherDays();
+      setupPetals(config.petalsEnabled);
+      updateLetterCountBadge();
+      loadTrack(config.currentTrackIndex || 0);
+
+      setInterval(updateClocksAndTogetherDays, 1000);
+
+      // Theme toggle
+      document.getElementById("themeToggleBtn").onclick = toggleTheme;
+
+      // Music controls
+      document.getElementById("toggleMusicBtn").onclick = toggleMusicPlayback;
+      document.getElementById("nextTrackBtn").onclick = nextTrack;
+
+      // Envelope interactions
+      document.getElementById("waxSealBtn").onclick = openEnvelope;
+      document.getElementById("envelopeWrapper").onclick = (e) => {
+        if (e.target.id !== "waxSealBtn" && !e.target.closest("#waxSealBtn")) {
+          openEnvelope();
+        }
+      };
+
+      document.getElementById("foldBackBtn").onclick = closeEnvelope;
+
+      document.getElementById("nextLetterBtn").onclick = () => {
+        selectLetterForViewing();
+        renderCurrentLetter();
+      };
+
+      document.getElementById("surpriseLetterBtn").onclick = () => {
+        selectLetterForViewing();
+        openEnvelope();
+      };
+
+      // Favorite toggle
+      document.getElementById("toggleFavoriteLetterBtn").onclick = () => {
+        if (!currentLetter || currentLetter.id === "empty") return;
+        currentLetter.favorite = !currentLetter.favorite;
+        const target = letters.find(l => l.id === currentLetter.id);
+        if (target) target.favorite = currentLetter.favorite;
+        saveLetters();
+        renderCurrentLetter();
+      };
+
+      // Petals toggle
+      document.getElementById("togglePetalsBtn").onclick = () => {
+        setupPetals(!config.petalsEnabled);
+        saveConfig();
+      };
+
+      // PIN & Admin Modal
+      const pinModal = document.getElementById("pinModal");
+      const adminModal = document.getElementById("adminModal");
+
+      document.getElementById("adminKeyBtn").onclick = () => {
+        document.getElementById("pinInput").value = "";
+        pinModal.classList.remove("hidden");
+        document.getElementById("pinInput").focus();
+      };
+
+      document.getElementById("cancelPinBtn").onclick = () => pinModal.classList.add("hidden");
+
+      document.getElementById("submitPinBtn").onclick = () => {
+        const enteredPin = document.getElementById("pinInput").value;
+        if (enteredPin === (config.adminPin || "1234")) {
+          pinModal.classList.add("hidden");
+          adminModal.classList.remove("hidden");
+          renderAdminMessagesList();
+          renderPlaylistUI();
+        } else {
+          document.getElementById("pinInput").classList.add("border-red-500");
+          setTimeout(() => {
+            document.getElementById("pinInput").classList.remove("border-red-500");
+          }, 800);
+        }
+      };
+
+      document.getElementById("pinInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") document.getElementById("submitPinBtn").click();
+      });
+
+      document.getElementById("closeAdminBtn").onclick = closeAdminModal;
+
+      // Admin Tab Navigation
+      document.querySelectorAll(".admin-tab").forEach(tab => {
+        tab.onclick = () => {
+          switchAdminTab(tab.getAttribute("data-tab"));
+        };
+      });
+
+      document.getElementById("openBulkTabQuickBtn").onclick = () => {
+        switchAdminTab("tab-bulk");
+      };
+
+      // Custom song addition
+      document.getElementById("addCustomSongBtn").onclick = () => {
+        const title = document.getElementById("customSongTitle").value.trim();
+        const url = document.getElementById("customSongUrl").value.trim();
+        if (title && url) {
+          config.playlist.push({ title: title, tag: "Custom", url: url });
+          saveConfig();
+          renderPlaylistUI();
+          document.getElementById("customSongTitle").value = "";
+          document.getElementById("customSongUrl").value = "";
+        }
+      };
+
+      // Bulk Upload Listeners
+      document.getElementById("bulkFileInput").onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          const content = evt.target.result;
+          document.getElementById("bulkPasteTextarea").value = content;
+          const parsed = parseBulkLettersRaw(content);
+          stageBulkPreview(parsed);
+        };
+        reader.readAsText(file);
+      };
+
+      document.getElementById("processBulkBtn").onclick = () => {
+        const raw = document.getElementById("bulkPasteTextarea").value;
+        const parsed = parseBulkLettersRaw(raw);
+        stageBulkPreview(parsed);
+      };
+
+      document.getElementById("insertSampleBulkBtn").onclick = () => {
+        document.getElementById("bulkPasteTextarea").value = 
+`Title: A night under the stars
+Category: Special Memory
+My love, remember that quiet drive when we stopped the car just to look up at the midnight sky? I still feel your hand in mine.
+---
+Title: Whenever the morning arrives
+Category: Good Morning
+Good morning sweetheart. Walk lightly today, breathe deeply, and smile knowing you are unconditionally cherished.
+---
+Title: Counting down the hours
+Category: Reunion Dreams
+Every morning brings us closer to being together again. Can't wait to wrap my arms around you.`;
+      };
+
+      document.getElementById("confirmBulkSaveBtn").onclick = () => {
+        if (!stagedBulkLetters || stagedBulkLetters.length === 0) return;
+
+        const importMode = document.querySelector('input[name="bulkImportMode"]:checked').value;
+        if (importMode === "replace") {
+          letters = [...stagedBulkLetters];
+        } else {
+          letters = [...stagedBulkLetters, ...letters];
+        }
+
+        saveLetters();
+        renderAdminMessagesList();
+
+        document.getElementById("bulkPreviewBox").classList.add("hidden");
+        document.getElementById("bulkPasteTextarea").value = "";
+        document.getElementById("bulkFileInput").value = "";
+
+        const notice = document.getElementById("syncStatusNotice");
+        notice.textContent = `Successfully imported ${stagedBulkLetters.length} letters! ✨`;
+        setTimeout(() => notice.textContent = "Changes saved locally", 3500);
+
+        switchAdminTab("tab-messages");
+      };
+
+      // Paper Style Selection
+      document.querySelectorAll(".style-choice-btn").forEach(btn => {
+        btn.onclick = () => {
+          config.paperStyle = btn.getAttribute("data-style");
+          applyDesignConfig();
+          saveConfig();
+        };
+      });
+
+      // Settings Inputs Handler
+      const updateSettingsFromInputs = () => {
+        config.fontFamily = document.getElementById("settingFontFamily").value;
+        config.waxColor = document.getElementById("settingWaxColor").value;
+        config.deliveryMode = document.getElementById("settingDeliveryMode").value;
+        config.togetherStartDate = document.getElementById("settingTogetherStartDate").value || "2024-12-15";
+        config.city1 = document.getElementById("settingCity1").value;
+        config.offset1 = document.getElementById("settingOffset1").value;
+        config.city2 = document.getElementById("settingCity2").value;
+        config.offset2 = document.getElementById("settingOffset2").value;
+        config.herName = document.getElementById("settingHerName").value;
+        config.senderName = document.getElementById("settingSenderName").value;
+        config.adminPin = document.getElementById("settingAdminPin").value || "1234";
+
+        saveConfig();
+        applyDesignConfig();
+        updateClocksAndTogetherDays();
+      };
+
+      [
+        "settingFontFamily", "settingWaxColor", "settingDeliveryMode", 
+        "settingTogetherStartDate", "settingCity1", "settingOffset1", 
+        "settingCity2", "settingOffset2", "settingHerName", "settingSenderName", "settingAdminPin"
+      ].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener("change", updateSettingsFromInputs);
+      });
+
+      document.getElementById("saveAdminChangesBtn").onclick = () => {
+        updateSettingsFromInputs();
+        closeAdminModal();
+      };
+
+      // Single Message Form
+      document.getElementById("addNewMessageBtn").onclick = () => openMessageEditor();
+      document.getElementById("cancelEditBtn").onclick = closeMessageEditor;
+      document.getElementById("cancelFormBtn").onclick = closeMessageEditor;
+
+      document.getElementById("messageEditorForm").onsubmit = (e) => {
+        e.preventDefault();
+        const editId = document.getElementById("editLetterId").value;
+        const title = document.getElementById("inputLetterTitle").value.trim();
+        const category = document.getElementById("inputLetterCategory").value;
+        const content = document.getElementById("inputLetterContent").value.trim();
+
+        if (editId) {
+          const idx = letters.findIndex(l => l.id === editId);
+          if (idx !== -1) {
+            letters[idx].title = title;
+            letters[idx].category = category;
+            letters[idx].content = content;
+          }
+        } else {
+          const newLetter = {
+            id: `letter-${Date.now()}`,
+            title: title,
+            category: category,
+            date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+            content: content,
+            favorite: false,
+            readCount: 0
+          };
+          letters.unshift(newLetter);
+        }
+
+        saveLetters();
+        renderAdminMessagesList();
+        closeMessageEditor();
+      };
+
+      // Backup & Restore
+      document.getElementById("exportDataBtn").onclick = exportDatabaseToJson;
+      document.getElementById("importDataInput").onchange = importDatabaseFromJson;
+
+      document.getElementById("resetDefaultsBtn").onclick = () => {
+        letters = [...DEFAULT_LETTERS];
+        saveLetters();
+        renderAdminMessagesList();
+      };
+    });
+  </script>
+</body>
+</html>
